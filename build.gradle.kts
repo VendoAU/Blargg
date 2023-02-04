@@ -44,3 +44,11 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
+}
