@@ -1,5 +1,6 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    `maven-publish`
     java
 }
 
@@ -35,5 +36,11 @@ tasks {
         manifest {
             attributes["Main-Class"] = "com.vendoau.blargg.Blargg"
         }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
