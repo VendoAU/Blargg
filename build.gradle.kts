@@ -20,7 +20,7 @@ dependencies {
     implementation("net.kyori:adventure-text-minimessage:4.12.0")
     implementation("com.github.mworzala.mc_debug_renderer:minestom:2c354a8e08")
 
-    implementation("org.jline:jline-reader:3.22.0")
+    implementation("redis.clients:jedis:4.3.1")
 }
 
 tasks {

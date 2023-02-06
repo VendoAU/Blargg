@@ -10,7 +10,7 @@ public class VersionCommand extends Command {
         super("version");
 
         addSyntax((sender, context) -> {
-            sender.sendMessage("Blargg: v" + Blargg.Properties.VERSION);
+            sender.sendMessage("Blargg: v" + Blargg.version());
             sender.sendMessage("Minestom: " + Git.commit().substring(0, 7));
         });
     }

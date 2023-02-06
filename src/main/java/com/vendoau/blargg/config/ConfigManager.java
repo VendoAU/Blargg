@@ -1,5 +1,6 @@
 package com.vendoau.blargg.config;
 
+import com.vendoau.blargg.config.serializer.InetSocketAddressSerializer;
 import com.vendoau.blargg.config.serializer.PosSerializer;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +10,7 @@ import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.file.Files;
 
 public abstract class ConfigManager {
@@ -19,6 +21,7 @@ public abstract class ConfigManager {
     private CommentedConfigurationNode config;
 
     private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.builder()
+            .register(InetSocketAddress.class, InetSocketAddressSerializer.INSTANCE)
             .register(Pos.class, PosSerializer.INSTANCE)
             .build();
 

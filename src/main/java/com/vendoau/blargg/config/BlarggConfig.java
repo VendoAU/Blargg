@@ -2,15 +2,22 @@ package com.vendoau.blargg.config;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 public class BlarggConfig extends ConfigManager {
 
-    private String ip;
-    private int port;
+    private String serverName;
+    private InetSocketAddress serverAddress;
+
     private String velocitySecret;
+
+    private InetSocketAddress redisAddress;
+    private String redisPassword;
+
     private Pos spawn;
     private GameMode gamemode;
 
@@ -22,23 +29,40 @@ public class BlarggConfig extends ConfigManager {
     public void load() throws IOException {
         super.load();
 
-        ip = config().node("server-ip").getString();
-        port = config().node("server-port").getInt();
-        velocitySecret = config().node("velocity-secret").getString();
-        spawn = config().node("spawn").get(Pos.class);
-        gamemode = GameMode.valueOf(config().node("gamemode").getString());
+        final CommentedConfigurationNode server = config().node("server");
+        serverName = server.node("name").getString();
+        serverAddress = server.get(InetSocketAddress.class);
+
+        final CommentedConfigurationNode velocity = config().node("velocity");
+        velocitySecret = velocity.node("secret").getString();
+
+        final CommentedConfigurationNode redis = config().node("redis");
+        redisAddress = redis.get(InetSocketAddress.class);
+        redisPassword = redis.node("password").getString();
+
+        final CommentedConfigurationNode other = config().node("other");
+        spawn = other.node("spawn").get(Pos.class);
+        gamemode = GameMode.valueOf(other.node("gamemode").getString());
     }
 
-    public String ip() {
-        return ip;
+    public String serverName() {
+        return serverName;
     }
 
-    public int port() {
-        return port;
+    public InetSocketAddress serverAddress() {
+        return serverAddress;
     }
 
     public String velocitySecret() {
         return velocitySecret;
+    }
+
+    public InetSocketAddress redisAddress() {
+        return redisAddress;
+    }
+
+    public String redisPassword() {
+        return redisPassword;
     }
 
     public Pos spawn() {
