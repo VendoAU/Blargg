@@ -27,10 +27,6 @@ public class Blargg {
     private static BlarggConfig config;
 
     public static void main(String[] args) {
-        new Blargg();
-    }
-
-    public Blargg() {
         try {
             final Properties properties = new Properties();
             properties.load(Blargg.class.getResourceAsStream("/blargg.properties"));
@@ -42,7 +38,6 @@ public class Blargg {
         config = new BlarggConfig();
 
         final MinecraftServer minecraftServer = MinecraftServer.init();
-        minecraftServer.start(config.serverAddress());
         VelocityProxy.enable(config.velocitySecret());
 
         // Instance
@@ -75,6 +70,8 @@ public class Blargg {
         // Shutdown
         final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
         schedulerManager.buildShutdownTask(RedisUtil::publishOfflineServerInfo);
+
+        minecraftServer.start(config.serverAddress());
     }
 
     public static String version() {

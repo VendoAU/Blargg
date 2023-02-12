@@ -1,6 +1,9 @@
 package com.vendoau.blargg.server;
 
 import com.google.gson.JsonObject;
+import com.vendoau.blargg.Blargg;
+import com.vendoau.blargg.config.BlarggConfig;
+import net.minestom.server.MinecraftServer;
 
 import java.net.InetSocketAddress;
 
@@ -15,6 +18,28 @@ public class ServerInfo {
     public ServerInfo(String name, InetSocketAddress address) {
         this.name = name;
         this.address = address;
+    }
+
+    public static ServerInfo get() {
+        final BlarggConfig config = Blargg.config();
+        final String name = config.serverName();
+        final InetSocketAddress address = config.serverAddress();
+
+        final ServerInfo serverInfo = new ServerInfo(name, address);
+        serverInfo.setPlayerCount(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
+        serverInfo.setOnline(true);
+
+        return serverInfo;
+    }
+
+    public JsonObject toJson() {
+        final JsonObject info = new JsonObject();
+        info.addProperty("name", name);
+        info.addProperty("ip", address.getHostString());
+        info.addProperty("port", address.getPort());
+        info.addProperty("playerCount", playerCount);
+        info.addProperty("online", online);
+        return info;
     }
 
     public static ServerInfo fromJson(JsonObject json) {

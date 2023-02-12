@@ -10,6 +10,7 @@ public class StopCommand extends Command {
 
         addSyntax((sender, context) -> {
             MinecraftServer.stopCleanly();
+            System.exit(0);
         });
     }
 }

@@ -1,8 +1,7 @@
 package com.vendoau.blargg.util;
 
-import com.google.gson.JsonObject;
 import com.vendoau.blargg.Blargg;
-import net.minestom.server.MinecraftServer;
+import com.vendoau.blargg.server.ServerInfo;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
@@ -48,20 +47,20 @@ public final class RedisUtil {
         subscribe((c, m) -> callback.accept(m), new String[]{channel});
     }
 
-    private static void publishServerInfo(int playerCount, boolean online) {
-        final JsonObject info = new JsonObject();
-        info.addProperty("playerCount", playerCount);
-        info.addProperty("online", online);
-
-        final String name = Blargg.config().serverName();
-        publish("info:" + name, info.toString());
+    private static void publishServerInfo(ServerInfo info) {
+        final String json = info.toJson().toString();
+        publish("info", json);
+        publish("info:" + info.name(), json);
     }
 
     public static void publishServerInfo() {
-        publishServerInfo(MinecraftServer.getConnectionManager().getOnlinePlayers().size(), true);
+        publishServerInfo(ServerInfo.get());
     }
 
     public static void publishOfflineServerInfo() {
-        publishServerInfo(0, false);
+        final ServerInfo info = ServerInfo.get();
+        info.setPlayerCount(0);
+        info.setOnline(false);
+        publishServerInfo(info);
     }
 }
