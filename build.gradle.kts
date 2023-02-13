@@ -21,6 +21,7 @@ dependencies {
     implementation("com.github.mworzala.mc_debug_renderer:minestom:2c354a8e08")
 
     implementation("redis.clients:jedis:4.3.1")
+    implementation("com.google.guava:guava:31.1-jre")
 }
 
 tasks {

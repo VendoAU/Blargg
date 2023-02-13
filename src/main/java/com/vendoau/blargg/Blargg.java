@@ -4,6 +4,7 @@ import com.vendoau.blargg.commands.StopCommand;
 import com.vendoau.blargg.commands.VersionCommand;
 import com.vendoau.blargg.config.BlarggConfig;
 import com.vendoau.blargg.generator.SuperFlatGenerator;
+import com.vendoau.blargg.pluginmessage.BungeeMessageHandler;
 import com.vendoau.blargg.util.InstanceUtil;
 import com.vendoau.blargg.util.RedisUtil;
 import net.minestom.server.MinecraftServer;
@@ -23,8 +24,8 @@ import java.util.Properties;
 public class Blargg {
 
     private static String version;
-
     private static BlarggConfig config;
+    private static BungeeMessageHandler bungeeMessageHandler;
 
     public static void main(String[] args) {
         try {
@@ -39,6 +40,8 @@ public class Blargg {
 
         final MinecraftServer minecraftServer = MinecraftServer.init();
         VelocityProxy.enable(config.velocitySecret());
+
+        bungeeMessageHandler = new BungeeMessageHandler();
 
         // Instance
         final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
@@ -80,5 +83,9 @@ public class Blargg {
 
     public static BlarggConfig config() {
         return config;
+    }
+
+    public static BungeeMessageHandler bungeeMessageHandler() {
+        return bungeeMessageHandler;
     }
 }
