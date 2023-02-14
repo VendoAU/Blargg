@@ -17,6 +17,7 @@ import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.timer.TaskSchedule;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -63,15 +64,17 @@ public class Blargg {
         });
 
         // Redis
-        RedisUtil.publishServerInfo();
         globalEventHandler.addListener(PlayerLoginEvent.class, event -> {
             RedisUtil.publishServerInfo();
         }).addListener(PlayerDisconnectEvent.class, event -> {
             RedisUtil.publishServerInfo();
         });
+        final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
+        schedulerManager.buildTask(RedisUtil::publishServerInfo)
+                .repeat(TaskSchedule.seconds(5))
+                .schedule();
 
         // Shutdown
-        final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
         schedulerManager.buildShutdownTask(RedisUtil::publishOfflineServerInfo);
 
         minecraftServer.start(config.serverAddress());
