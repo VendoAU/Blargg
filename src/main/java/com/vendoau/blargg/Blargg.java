@@ -1,5 +1,7 @@
 package com.vendoau.blargg;
 
+import com.vendoau.blargg.commands.ExtensionsCommand;
+import com.vendoau.blargg.commands.GameModeCommand;
 import com.vendoau.blargg.commands.StopCommand;
 import com.vendoau.blargg.commands.VersionCommand;
 import com.vendoau.blargg.config.BlarggConfig;
@@ -7,6 +9,8 @@ import com.vendoau.blargg.generator.SuperFlatGenerator;
 import com.vendoau.blargg.pluginmessage.BungeeMessageHandler;
 import com.vendoau.blargg.util.InstanceUtil;
 import com.vendoau.blargg.util.RedisUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
@@ -51,8 +55,13 @@ public class Blargg {
 
         // Commands
         final CommandManager commandManager = MinecraftServer.getCommandManager();
+        commandManager.register(new ExtensionsCommand());
+        commandManager.register(new GameModeCommand());
         commandManager.register(new StopCommand());
         commandManager.register(new VersionCommand());
+        commandManager.setUnknownCommandCallback((sender, command) -> {
+            sender.sendMessage(Component.text("Unknown command.", NamedTextColor.RED));
+        });
 
         // Login
         final GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
